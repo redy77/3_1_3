@@ -1,5 +1,7 @@
 package ru.viktor.lesson_3_1_1.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import ru.viktor.lesson_3_1_1.models.User;
 import javax.persistence.EntityManager;
@@ -9,6 +11,13 @@ import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
+
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserDaoImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -28,18 +37,21 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         entityManager.persist(user);
     }
 
 
     @Override
     public void editUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         entityManager.merge(user);
     }
 
     @Override
     public void deleteUser(Long id) {
-        entityManager.remove(getUser(id));
+        User user = getUser(id);
+        entityManager.remove(user);
     }
 
 

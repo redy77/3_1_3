@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить пользователя</title>
+</head>
+<body>
+<h2>Добавить пользователя</h2>
+
+<div>
+    <form th:action="@{/new}"
+          th:method="POST"
+          th:object="${user}">
+        <fieldset>
+            <legend>Данные пользователя</legend>
+            <p>
+                <label th:for="username">Логин
+                    <input type="text"
+                           name="username"
+                           th:id="username">
+                </label>
+                <br/>
+                <label th:for="age">Возраст
+                    <input type="text"
+                           name="age"
+                           th:id="age">
+                </label>
+                <br/>
+                <label th:for="email">Почтовый ящик
+                    <input type="text"
+                           name="email"
+                           th:id="email">
+                    <br/>
+                    <label th:for="password">Пароль
+                        <input type="text"
+                               name="password"
+                               th:id="password">
+                    </label>
+                </label>
+                <br/>
+                <label th:for="roles">Выберите роль:</label>
+                <select name="choseRoles" multiple size="3" >
+                    <option th:each="role : ${roles}" th:value="${role.getId()}" th:text="${role.getRole()}">
+                    </option>
+                </select>
+            </p>
+        </fieldset>
+        <br/>
+        <br/>
+        <br/>
+        <button type="submit">Сохранить пользователя</button>
+    </form>
+    <br/>
+    <form th:action="@{/admin}">
+        <button type="submit">Назад к списку пользователей</button>
+    </form>
+</div>
+<form th:if="${#request.userPrincipal != null}" th:action="@{/logout}">
+    <button type="submit">Выйти</button>
+</form>
+</body>
+</html>
