@@ -1,6 +1,5 @@
 package ru.viktor.lesson_3_1_1.models;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

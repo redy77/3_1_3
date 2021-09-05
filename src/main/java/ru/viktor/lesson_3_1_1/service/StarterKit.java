@@ -26,7 +26,7 @@ public class StarterKit {
         roleService.addRole(role);
         Roles role1 = new Roles("ROLE_USER");
         roleService.addRole(role1);
-        User user = new User("1", "1", 34, "tom@tom.ru", Set.of(role, role1));
+        User user = new User("1", "1", 34, "1", Set.of(role, role1));
         User user1 = new User("user", "1", 34, "tom1@tom.ru", Set.of(role1));
         userService.addUser(user);
         userService.addUser(user1);

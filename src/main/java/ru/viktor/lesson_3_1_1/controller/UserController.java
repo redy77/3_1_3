@@ -1,6 +1,5 @@
 package ru.viktor.lesson_3_1_1.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -77,8 +76,8 @@ public class UserController {
 
     @GetMapping("/{id}/edit")
     public String edit(@ModelAttribute("user") User user, Model model, @PathVariable("id") Long id) {
+        model.addAttribute("user", userService.getUser(id));
         model.addAttribute("roles", roleService.getListRoles());
-        model.addAttribute("userView", userService.getUser(id));
         return "edit";
     }
 
