@@ -11,7 +11,7 @@
     <input id="name" th:field="*{username}" type="text"/>
     <br/>
     <label for="age">Enter age: </label>
-    <input id="age" th:field="*{age}"  type="text"/>
+    <input id="age" th:field="*{age}"  type="number"/>
     <br/>
     <label for="email">Enter email: </label>
     <input id="email" th:field="*{email}"  type="text"/>
@@ -21,7 +21,7 @@
     </label>
     <br/>
     <label th:for="roles">Выберите роль: </label>
-    <select name="choseRoles" multiple size="3" >
+    <select name="choseRoles" multiple size="2" >
         <option th:each="role : ${roles}" th:value="${role.getId()}" th:text="${role.getRole()}">
         </option>
     </select>

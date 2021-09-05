@@ -20,7 +20,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUser(Long id) {
-
         TypedQuery<User> query = entityManager.createQuery("select u from User u where u.id= :id", User.class);
         query.setParameter("id", id);
         return query.getResultList().stream().findAny().orElse(null);

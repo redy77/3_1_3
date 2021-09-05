@@ -11,19 +11,17 @@
         <th>Пользователь</th>
         <th>Возраст</th>
         <th>Email</th>
-        <th>Пароль</th>
     </tr>
     <tbody>
 
     <div th:each="user : ${users}">
         <tr>
-            <td><a th:href="@{/{id}(id=${user.getId()})}" th:text="${user.getUsername()}">user</a></td>
+            <td><a th:text="${user.getUsername()}">user</a></td>
             <td><a th:text="${user.getAge()}">VALUE</a></td>
             <td><a th:text="${user.getEmail()}">VALUE</a></td>
-            <td><a th:text="${user.getPassword()}">VALUE</a></td>
             <td>
                 <div th:each="role: ${user.getRoles()}">
-                    <span th:if="(${role.getRole()} == 'ROLE_ADMIN')" th:utext="Администратор"></span>
+                    <span th:if="(${role.getRole()} == 'ROLE_ADMIN')" th:text="Администратор"></span>
                 </div>
             </td>
             <td>
@@ -40,9 +38,6 @@
     </div>
     </tbody>
 </table>
-
-</br>
-
 <hr/>
 <form th:action="@{/new}">
     <button type="submit">Создать нового пользователя</button>

@@ -1,6 +1,7 @@
 package ru.viktor.lesson_3_1_1.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -8,10 +9,7 @@ import ru.viktor.lesson_3_1_1.models.Roles;
 import ru.viktor.lesson_3_1_1.models.User;
 import ru.viktor.lesson_3_1_1.service.RoleService;
 import ru.viktor.lesson_3_1_1.service.UserService;
-import java.security.Principal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -37,8 +35,8 @@ public class UserController {
     }
 
     @GetMapping("user")
-    public String User(Model model, Principal principal) {
-        model.addAttribute("user", userService.getUserByName(principal.getName()));
+    public String User(Model model, Authentication authentication) {
+        model.addAttribute("user", authentication.getPrincipal());
         return "user";
     }
 
@@ -49,7 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id, Model model) {
+    public String delete(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
