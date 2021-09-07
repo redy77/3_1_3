@@ -17,7 +17,7 @@
     <input id="email" th:field="*{email}"  type="text"/>
     <br/>
     <label th:for="password">Пароль
-        <input type="text" name="password" th:id="password">
+        <input type="password" name="password" th:value="${user.getPassword()}" th:id="password">
     </label>
     <br/>
     <label th:for="roles">Выберите роль: </label>

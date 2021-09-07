@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
     @Override
 
     public void editUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (!user.getPassword().equals(userDao.getUser(user.getId()).getPassword())){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));}
         userDao.editUser(user);
     }
 
@@ -49,11 +50,6 @@ public class UserServiceImpl implements UserService {
 
     public void deleteUser(Long id) {
         userDao.deleteUser(id);
-    }
-
-    @Override
-    public User getUserByName(String name) {
-        return userDao.getUserByName(name);
     }
 
     @Override

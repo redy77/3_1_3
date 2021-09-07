@@ -1,10 +1,11 @@
 package ru.viktor.lesson_3_1_1.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import ru.viktor.lesson_3_1_1.models.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -13,6 +14,13 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserDaoImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Override
     public List<User> getAll() {
         return entityManager.createQuery("select u from User u", User.class).getResultList();
@@ -20,9 +28,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUser(Long id) {
-        TypedQuery<User> query = entityManager.createQuery("select u from User u where u.id= :id", User.class);
-        query.setParameter("id", id);
-        return query.getResultList().stream().findAny().orElse(null);
+        return entityManager.find(User.class, id);
     }
 
     @Override
@@ -37,21 +43,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void deleteUser(Long id) {
-        User user = getUser(id);
-        entityManager.remove(user);
-    }
-
-    @Override
-    public User getUserByName(String name) {
-        TypedQuery<User> query = entityManager.createQuery("select u from User u where u.username= :name", User.class);
-        query.setParameter("name", name);
-        return query.getResultList().stream().findAny().orElse(null);
+        entityManager.remove(getUser(id));
     }
 
     @Override
     public User getUserByEmail(String email) {
-        TypedQuery<User> query = entityManager.createQuery("select u from User u where u.email= :email", User.class);
-        query.setParameter("email", email);
-        return query.getSingleResult();
+        return entityManager.createQuery("select u from User u where u.email= :email", User.class)
+                .setParameter("email", email)
+                .getSingleResult();
     }
 }
+
