@@ -7,14 +7,14 @@
 <body>
 
 <form th:action="@{/{id}(id=${user.getId()})}" th:method="PATCH" th:object="${user}">
-    <label for="name" >Enter name: </label>
+    <label for="name">Enter name: </label>
     <input id="name" th:field="*{username}" type="text"/>
     <br/>
     <label for="age">Enter age: </label>
-    <input id="age" th:field="*{age}"  type="number"/>
+    <input id="age" th:field="*{age}" type="number"/>
     <br/>
     <label for="email">Enter email: </label>
-    <input id="email" th:field="*{email}"  type="text"/>
+    <input id="email" th:field="*{email}" type="text"/>
     <br/>
     <label th:for="password">Пароль
         <input type="password" name="password" th:value="${user.getPassword()}" th:id="password">

@@ -32,6 +32,7 @@ public class UserController {
     public String AllUsers(Model model, Authentication authentication) {
         model.addAttribute("users", userService.getAll());
         model.addAttribute("user", authentication.getPrincipal());
+        model.addAttribute("roles", roleService.getListRoles());
         return "index";
     }
 
