@@ -1,9 +1,9 @@
-package ru.viktor.lesson_3_1_1.dao;
+package ru.viktor.lesson_3_1_2.service;
 
-import ru.viktor.lesson_3_1_1.models.User;
+import ru.viktor.lesson_3_1_2.models.User;
 import java.util.List;
+public interface UserService {
 
-public interface UserDao {
     List<User> getAll();
 
     User getUser(Long id);

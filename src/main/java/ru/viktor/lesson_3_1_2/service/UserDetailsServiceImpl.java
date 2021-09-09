@@ -1,11 +1,11 @@
-package ru.viktor.lesson_3_1_1.service;
+package ru.viktor.lesson_3_1_2.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.viktor.lesson_3_1_1.models.User;
+import ru.viktor.lesson_3_1_2.models.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

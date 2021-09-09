@@ -1,14 +1,14 @@
-package ru.viktor.lesson_3_1_1.controller;
+package ru.viktor.lesson_3_1_2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.viktor.lesson_3_1_1.models.Roles;
-import ru.viktor.lesson_3_1_1.models.User;
-import ru.viktor.lesson_3_1_1.service.RoleService;
-import ru.viktor.lesson_3_1_1.service.UserService;
+import ru.viktor.lesson_3_1_2.models.Roles;
+import ru.viktor.lesson_3_1_2.models.User;
+import ru.viktor.lesson_3_1_2.service.RoleService;
+import ru.viktor.lesson_3_1_2.service.UserService;
 import java.util.*;
 
 @Controller
@@ -28,9 +28,10 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("admin")
-    public String AllUsers(Model model) {
+    @GetMapping("/")
+    public String AllUsers(Model model, Authentication authentication) {
         model.addAttribute("users", userService.getAll());
+        model.addAttribute("user", authentication.getPrincipal());
         return "index";
     }
 
@@ -49,7 +50,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
 
@@ -69,7 +70,7 @@ public class UserController {
         user.setRoles(roles);
 
         userService.addUser(user);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
     @GetMapping("/{id}/edit")
@@ -88,6 +89,6 @@ public class UserController {
         }
         user.setRoles(roles);
         userService.editUser(user);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 }

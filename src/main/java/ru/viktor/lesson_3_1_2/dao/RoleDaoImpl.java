@@ -1,7 +1,7 @@
-package ru.viktor.lesson_3_1_1.dao;
+package ru.viktor.lesson_3_1_2.dao;
 
 import org.springframework.stereotype.Repository;
-import ru.viktor.lesson_3_1_1.models.Roles;
+import ru.viktor.lesson_3_1_2.models.Roles;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

@@ -1,4 +1,4 @@
-package ru.viktor.lesson_3_1_1.models;
+package ru.viktor.lesson_3_1_2.models;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

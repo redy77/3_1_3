@@ -1,4 +1,4 @@
-package ru.viktor.lesson_3_1_1.security;
+package ru.viktor.lesson_3_1_2.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder()); // конфигурация для прохождения аутентификации
     }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -50,8 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/index").permitAll()
                 .antMatchers("/login").anonymous()
-                .antMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                .antMatchers("/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+//                .antMatchers("/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated();
     }
 

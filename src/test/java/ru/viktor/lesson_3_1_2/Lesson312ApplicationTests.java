@@ -1,10 +1,10 @@
-package ru.viktor.lesson_3_1_1;
+package ru.viktor.lesson_3_1_2;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Lesson311ApplicationTests {
+class Lesson312ApplicationTests {
 
 	@Test
 	void contextLoads() {

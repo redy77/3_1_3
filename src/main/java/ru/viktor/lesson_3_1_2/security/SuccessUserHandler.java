@@ -1,4 +1,4 @@
-package ru.viktor.lesson_3_1_1.security;
+package ru.viktor.lesson_3_1_2.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -16,9 +16,9 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
         if (roles.contains("ROLE_ADMIN")) {
-            httpServletResponse.sendRedirect("/admin");
+            httpServletResponse.sendRedirect("/");
         }else {
-            httpServletResponse.sendRedirect("/user");
+            httpServletResponse.sendRedirect("/");
         }
     }
 }

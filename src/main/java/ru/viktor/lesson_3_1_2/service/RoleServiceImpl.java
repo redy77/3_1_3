@@ -1,10 +1,10 @@
-package ru.viktor.lesson_3_1_1.service;
+package ru.viktor.lesson_3_1_2.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.viktor.lesson_3_1_1.dao.RoleDao;
-import ru.viktor.lesson_3_1_1.models.Roles;
+import ru.viktor.lesson_3_1_2.dao.RoleDao;
+import ru.viktor.lesson_3_1_2.models.Roles;
 import java.util.List;
 
 @Service

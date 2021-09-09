@@ -1,50 +1,183 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <title>All users</title>
 </head>
-<body>
-
-<table BORDER="0">
-    <tr>
-        <th>Пользователь</th>
-        <th>Возраст</th>
-        <th>Email</th>
-    </tr>
-    <tbody>
-
-    <div th:each="user : ${users}">
-        <tr>
-            <td><a th:text="${user.getUsername()}">user</a></td>
-            <td><a th:text="${user.getAge()}">VALUE</a></td>
-            <td><a th:text="${user.getEmail()}">VALUE</a></td>
-            <td>
-                <div th:each="role: ${user.getRoles()}">
-                    <span th:if="(${role.getRole()} == 'ROLE_ADMIN')" th:text="Администратор"></span>
+<header>
+    <div class="container-fluid">
+        <div class="row" style="background-color: black">
+            <div class="col-8">
+                <div class="d-flex">
+                    <div class="text-light fw-bold mx-2 my-2" th:text="${user.getEmail()}"></div>
+                    <div class="text-light my-2" th:text="' with roles:'"></div>
+                    <div th:each="role: ${user.getRoles()}">
+                        <div class="text-light mx-2 my-2" th:text="${role.getRole()}"></div>
+                    </div>
                 </div>
-            </td>
-            <td>
-                <form th:action="@{/{id}/edit(id=${user.getId()})}">
-                    <input type="submit" value="Edit"/>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{/{id}(id=${user.getId()})}" th:method="DELETE">
-                    <input type="submit" value="Delete"/>
-                </form>
-            </td>
-        </tr>
+            </div>
+            <div class="col-4">
+                <div class="d-flex justify-content-end">
+                    <a class="nav-link link-secondary  px-2" th:if="${#request.userPrincipal != null}"
+                       th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
     </div>
-    </tbody>
-</table>
-<hr/>
-<form th:action="@{/new}">
-    <button type="submit">Создать нового пользователя</button>
-</form>
+</header>
+<body>
+<div class="container-fluid">
 
-<form th:if="${#request.userPrincipal != null}" th:action="@{/logout}">
-    <button type="submit">Выйти</button>
-</form>
+    <div class="row gx-0">
+        <div class="col-2">
+            <div sec:authorize="isAuthenticated()" th:unless="${#authorization.expression('hasRole(''ADMIN'')')}">
+                <div div class="nav flex-column nav-pills" id="myTabUser">
+                    <a a class="nav-link my-4 active" id="userSimple-tab" data-bs-toggle="tab"
+                       data-bs-target="#userSimple"
+                       type="button"
+                       role="tab" aria-controls="userSimple" aria-selected="true">User</a>
+                </div>
+            </div>
+            <div sec:authorize="isAuthenticated()"
+                 th:if="${user!=null} and ${#authorization.expression('hasRole(''ADMIN'')')}">
+                <div div class="nav flex-column nav-pills" id="myTab">
+
+                    <a class="nav-link active my-4 " aria-current="page" id="admin-tab" data-bs-toggle="tab"
+                       data-bs-target="#admin" type="button" role="tab" aria-controls="admin"
+                       aria-selected="true">Admin</a>
+
+                    <a a class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#user" type="button"
+                       role="tab" aria-controls="user" aria-selected="false">User</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container-fluid col-10 bg-light vh-100">
+            <br>
+            <div sec:authorize="isAuthenticated()"
+                 th:if="${user!=null} and ${#authorization.expression('hasRole(''ADMIN'')')}">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="admin">
+                        <h1 class="mx-4">Admin panel</h1>
+                        <ul class="nav nav-tabs mx-4" id="myTabPanel" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="users-tab" data-bs-toggle="tab"
+                                        data-bs-target="#users"
+                                        type="button" role="tab" aria-controls="users" aria-selected="true">Users table
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#new"
+                                        type="button"
+                                        role="tab" aria-controls="new" aria-selected="false">New user
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabPanelContent">
+                            <div class="tab-pane fade show active" id="users">
+                                <table class="table-header">
+                                    <tr>
+                                        <th>Пользователь</th>
+                                        <th>Возраст</th>
+                                        <th>Email</th>
+                                        <th>Email</th>
+                                        <th>Email</th>
+                                        <th>Email</th>
+                                    </tr>
+                                    <tbody>
+
+                                    <div th:each="user : ${users}">
+                                        <tr>
+                                            <td><a th:text="${user.getUsername()}">user</a></td>
+                                            <td><a th:text="${user.getAge()}">VALUE</a></td>
+                                            <td><a th:text="${user.getEmail()}">VALUE</a></td>
+                                            <td>
+                                                <div th:each="role: ${user.getRoles()}">
+                                            <span th:if="(${role.getRole()} == 'ROLE_ADMIN')"
+                                                  th:text="Администратор"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{/{id}/edit(id=${user.getId()})}">
+                                                    <input type="submit" value="Edit"/>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{/{id}(id=${user.getId()})}" th:method="DELETE">
+                                                    <input type="submit" value="Delete"/>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="new">
+                                <h1>New</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="user">
+                        <table class="table mx-2 my-2" style="max-width:800px;">
+                            <tr>
+                                <th>Пользователь</th>
+                                <th>Возраст</th>
+                                <th>Email</th>
+                            </tr>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <a th:text="${user.getUsername()}">VALUE</a>
+                                </td>
+                                <td>
+                                    <a th:text="${user.getAge}">VALUE</a>
+                                </td>
+                                <td>
+                                    <a th:text="${user.getEmail}">VALUE</a>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div sec:authorize="isAuthenticated()" th:unless="${#authorization.expression('hasRole(''ADMIN'')')}">
+                <div class="tab-content" id="myTabUserContent">
+                    <div class="tab-pane fade show active" id="userSimple">
+                        <table class="table mx-2 my-2" style="max-width:800px;">
+                            <tr>
+                                <th>Пользователь</th>
+                                <th>Возраст</th>
+                                <th>Email</th>
+                            </tr>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <a th:text="${user.getUsername()}">VALUE</a>
+                                </td>
+                                <td>
+                                    <a th:text="${user.getAge}">VALUE</a>
+                                </td>
+                                <td>
+                                    <a th:text="${user.getEmail}">VALUE</a>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
 </body>
 </html>

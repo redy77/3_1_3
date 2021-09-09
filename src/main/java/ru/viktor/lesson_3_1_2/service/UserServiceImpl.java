@@ -1,11 +1,12 @@
-package ru.viktor.lesson_3_1_1.service;
+package ru.viktor.lesson_3_1_2.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.viktor.lesson_3_1_1.dao.UserDao;
-import ru.viktor.lesson_3_1_1.models.User;
+import ru.viktor.lesson_3_1_2.dao.UserDao;
+import ru.viktor.lesson_3_1_2.models.User;
+
 import java.util.List;
 
 @Service
@@ -41,8 +42,9 @@ public class UserServiceImpl implements UserService {
     @Override
 
     public void editUser(User user) {
-        if (!user.getPassword().equals(userDao.getUser(user.getId()).getPassword())){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));}
+        if (!user.getPassword().equals(userDao.getUser(user.getId()).getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userDao.editUser(user);
     }
 
