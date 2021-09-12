@@ -40,8 +40,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-
     public void editUser(User user) {
+        if (user.getPassword().equals("")) {
+            user.setPassword(userDao.getUser(user.getId()).getPassword());
+        }
         if (!user.getPassword().equals(userDao.getUser(user.getId()).getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
