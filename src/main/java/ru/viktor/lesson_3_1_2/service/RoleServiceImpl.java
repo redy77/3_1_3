@@ -24,8 +24,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Roles getRole(Long id) {
-        return roleDao.getRole(id);
+    public Roles getRole(String role) {
+        return roleDao.getRole(role);
     }
 
     @Override

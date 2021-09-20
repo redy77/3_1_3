@@ -1,5 +1,6 @@
 package ru.viktor.lesson_3_1_2.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,11 +15,15 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 public class Roles implements GrantedAuthority {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String role;
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     private Set<User> users;
 
     public Roles(String role) {
@@ -43,4 +48,8 @@ public class Roles implements GrantedAuthority {
         return Objects.hash(id, role);
     }
 
+    @Override
+    public String toString() {
+        return role;
+    }
 }

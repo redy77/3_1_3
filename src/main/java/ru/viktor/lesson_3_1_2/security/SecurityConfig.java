@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,27 +37,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin()
-                .loginPage("/login")
-                .successHandler(successUserHandler)
+        http
+                .formLogin()
                 .loginProcessingUrl("/login")
                 .usernameParameter("j_username")
-                .passwordParameter("j_password");
-
-        http.logout()
-                .permitAll()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
-                .and().csrf().disable();
-
+                .passwordParameter("j_password")
+                .permitAll();
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/index").permitAll()
-                .antMatchers("/login").anonymous()
-                .antMatchers("/**").authenticated()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated();
+        http
+                .logout()
+                .permitAll()
+                .logoutSuccessUrl("/login");
     }
-
     @Bean
     public static PasswordEncoder passwordEncoder() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
