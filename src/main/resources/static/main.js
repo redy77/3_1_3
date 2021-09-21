@@ -9,14 +9,19 @@ const ageNewUser = document.getElementById('age')
 const emailNewUser = document.getElementById('email')
 const passwordNewUser = document.getElementById('password')
 const editUser = document.getElementById('userData')
+const formEdit = document.getElementById('formEdit')
+const allRolesEdit = document.getElementById('allRolesEdit')
 let renderAllUsers = (users) => {
     let outputUsers = ''
     users.forEach(user => {
         let userRole = ''
         user.roles.forEach(role => {
-                userRole += role.authority + "  "
+            let usersRole = 'User'
+            if (role.authority === 'ROLE_ADMIN') {
+                usersRole = 'Admin'
             }
-        )
+            userRole += (usersRole + "  ")
+        })
         outputUsers += `
              <tr>
              <td><a>${user.id}</a></td>
@@ -32,16 +37,20 @@ let renderAllUsers = (users) => {
                  </div>
              </td>      
              <td>
-                  <div>
-                      <button type="button" class="btn btn-primary">
-                         Edit
-                      </button>
-                 </div>
-             </td>                                  
-             <td>
-                  <button type="button" class="btn btn-danger">
-                      Delete
-                  </button>
+             <div data-id="${user.id}">
+             <button type="button" class="btn btn-primary" id="editUserClick"
+             data-bs-toggle="modal" data-bs-target="#editUser">
+             Edit
+             </button>
+             </div>
+             </td>
+              <td>
+              <div data-id="${user.id}">
+              <button type="button" class="btn btn-danger"
+              data-bs-toggle="modal" data-bs-target="#deleteUser" id="deleteUserClick">
+              Delete
+               </button>
+               </div>
              </td>
         `
     })
@@ -51,15 +60,16 @@ const urlHeader = '/admin'
 const urlAllUsers = '/users'
 const urlAllRoles = '/roles'
 const urlNewUser = '/newUser'
+const urlEditUser = '/editUser'
 let outputPrincipalEmail = ''
 let outputRoles = ''
 let outputUserSimplyInfo = ''
+let userId = ''
 
 // fill header
 fetch(urlHeader)
     .then(res => res.json())
     .then(data => {
-        console.log(data)
         outputPrincipalEmail = `
 <div class="text-light fw-bold mx-2 my-2">${data.email}
             `
@@ -68,16 +78,85 @@ fetch(urlHeader)
 fetch(urlHeader)
     .then(res => res.json())
     .then(data => data.roles.forEach(role => {
+        let userRole = 'User'
+        if (role.authority === 'ROLE_ADMIN') {
+            userRole = 'Admin'
+        }
         outputRoles += `
-                  <div class="d-flex mx-2">${role.authority}
+                  <div class="d-flex mx-2">${userRole}
                   `
         principalRoles.innerHTML = outputRoles
     }))
+
+// select roles
+selectRoles()
+async function selectRoles() {
+    let outputAllRoles = ''
+    const response = await fetch(urlAllRoles)
+    const data = await response.json()
+    data.forEach(role => {
+        outputAllRoles += `
+                                        <option 
+                                                th:value="${role.id}"
+                                                >${role.role}
+                                        </option>
+                  `
+        allRoles.innerHTML = outputAllRoles
+        allRolesEdit.innerHTML = outputAllRoles
+    })
+}
+
 usersTable()
 async function usersTable() {
     const response = await fetch(urlAllUsers)
     const data = await response.json()
     renderAllUsers(data)
+
+
+    // get user for delete/edit
+    allUsers.addEventListener('click', (e) => {
+        let editButtonClick = e.target.id === 'editUserClick'
+        let deleteButtonClick = e.target.id === 'deleteUserClick'
+
+        if (deleteButtonClick){
+            userId = e.target.parentElement.dataset.id
+        }
+        if (editButtonClick) {
+            userId = e.target.parentElement.dataset.id
+            fetch(`${urlEditUser}/${userId}`, {method: 'GET',})
+                .then(res => res.json())
+                .then(data => {
+                    let editForm = `
+                      <label class="form-label"
+                               for="id">ID</label>
+                        <input id="idEdit" value=${data.id}
+                               name="id" readonly type="text"/>
+                        <br/>
+                        <label class="form-label" for="name">Enter
+                            name: </label>
+                        <input id="nameEdit"
+                               name="username" value=${data.username} type="text"/>
+                        <br/>
+                        <br/>
+                        <label for="age">Enter age: </label>
+                        <input id="ageEdit"
+                               name="age" value=${data.age} type="number"/>
+                        <br/>
+                        <br/>
+                        <label for="email">Enter email: </label>
+                        <input id="emailEdit"
+                               name="email" value=${data.email} type="text"/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <label th:for="password">Пароль</label>
+                        <input type="password" name="password"
+                               id="passwordEdit">
+                     `
+                    formEdit.innerHTML = editForm
+                })
+        }
+    })
 }
 
 // fill user information
@@ -85,10 +164,13 @@ fetch(urlHeader)
     .then(res => res.json())
     .then(data => {
         let userRole = ''
+        let usersRole = 'User'
         data.roles.forEach(role => {
-                userRole += role.authority + "  "
+            if (role.authority === 'ROLE_ADMIN') {
+                usersRole = 'Admin'
             }
-        )
+            userRole += (usersRole + "  ")
+        })
         outputUserSimplyInfo = `
                                 <td><a>${data.id}</a></td>
                                 <td><a>${data.username}</a></td>
@@ -106,21 +188,6 @@ fetch(urlHeader)
         userSimplyInfo.innerHTML = outputUserSimplyInfo
     })
 
-// select roles
-selectRoles()
-async function selectRoles() {
-    let outputAllRoles = ''
-    const response = await fetch(urlAllRoles)
-    const data = await response.json()
-    data.forEach(role => {
-        outputAllRoles += `
-                                        <option 
-                                                th:value="${role.id}"
-                                                >${role.role}
-                                        </option>
-                  `
-        allRoles.innerHTML = outputAllRoles
-    })}
 // add new user
 userDataNew.addEventListener('submit', async e => {
     e.preventDefault()
@@ -151,3 +218,38 @@ userDataNew.addEventListener('submit', async e => {
                 usersTable()
         })
 })
+
+//edit user
+editUser.addEventListener('submit', async e => {
+    e.preventDefault()
+    const ageEdit = document.getElementById('ageEdit')
+    const idEdit = document.getElementById('idEdit')
+    const nameEdit = document.getElementById('nameEdit')
+    const emailEdit = document.getElementById('emailEdit')
+    const passwordEdit = document.getElementById('passwordEdit')
+
+    let selected = Array.from(editUser.role.options)
+        .filter(option => option.selected)
+        .map(option => option.value);
+
+    await fetch(urlEditUser, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: idEdit.value,
+            username: nameEdit.value,
+            age: ageEdit.value,
+            email: emailEdit.value,
+            password: passwordEdit.value,
+            roles: selected
+        })
+    })
+        .then(() => {
+            usersTable()
+        })
+})
+
+//delete user
+

@@ -44,10 +44,9 @@ public class UserServiceImpl implements UserService {
     public void editUser(User user) {
         if (user.getPassword().equals("")) {
             user.setPassword(userDao.getUser(user.getId()).getPassword());
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         if (!user.getPassword().equals(userDao.getUser(user.getId()).getPassword())) {
-
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userDao.editUser(user);
     }

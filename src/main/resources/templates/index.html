@@ -109,7 +109,6 @@
                             </div>
                             <div class="tab-pane fade" id="new">
                                 <form id="userDataNew"
-                                      th:object="${user}"
                                       style="align-content: center; max-width:200px; margin:auto; text-align: center"
                                       class="fw-bold">
                                     <br/>
@@ -138,7 +137,6 @@
                                     <select class="form-select" id="allRoles"
                                             name="role" multiple size="2"
                                             required>
-
                                     </select>
                                     <br/>
                                     <button class="btn btn-success" type="submit"
@@ -205,7 +203,6 @@
     </div>
 </div>
 <div class="modal fade" id="editUser"
-     th:attrappend="id=${user.id}" tabindex="-1"
      aria-hidden="true" aria-labelledby="editUserLabel">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -221,42 +218,13 @@
                       style="align-content: center; max-width:200px; margin:auto; text-align: center"
                       class="fw-bold">
                     <br/>
-                    <label class="form-label"
-                           for="id">ID</label>
-                    <input id="id" th:value="${user.id}"
-                           name="id" readonly type="text"/>
-                    <br/>
-                    <label class="form-label" for="name">Enter
-                        name: </label>
-                    <input id="name" th:value="${user.username}"
-                           name="username" type="text"/>
+                    <div id="formEdit">
+                    </div>
                     <br/>
                     <br/>
-                    <label for="age">Enter age: </label>
-                    <input id="age" th:value="${user.age}"
-                           name="age" type="number"/>
-                    <br/>
-                    <br/>
-                    <label for="email">Enter email: </label>
-                    <input id="email" th:value="${user.email}"
-                           name="email" type="text"/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <label th:for="password">Пароль</label>
-                    <input type="password" name="password"
-                           id="password">
-                    <br/>
-                    <br/>
-                    <label th:for="roles">Выберите
-                        роль: </label>
-                    <select class="form-select"
-                            name="choseRoles" multiple size="2"
+                    <select class="form-select" id="allRolesEdit"
+                            name="role" multiple size="2"
                             required>
-                        <option th:each="role : ${roles}"
-                                th:value="${role.getId()}"
-                                th:text="${role.getRole()}">
-                        </option>
                     </select>
                     <br/>
                     <br/>
@@ -269,8 +237,73 @@
                         aria-label="close">Close
                 </button>
                 <button class="btn btn-primary" type="submit"
-                        form="userData"
-                        th:attrappend="form=${user.id}">Update!
+                        data-bs-dismiss="modal"
+                        form="userData">Update!
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteUser"
+     aria-hidden="true" aria-labelledby="editUserLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserLabel">
+                    Edit
+                    user</h5>
+                <button class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="userDataDelete"
+                      style="align-content: center; max-width:200px; margin:auto; text-align: center"
+                      class="fw-bold">
+                    <br/>
+                    <label class="form-label"
+                           for="id">ID</label>
+                    <input id="id"
+                           name="id" disabled type="text"/>
+                    <br/>
+                    <label class="form-label"
+                           for="name">Name</label>
+                    <input id="name"
+                           disabled name="username"
+                           type="text"/>
+                    <br/>
+                    <br/>
+                    <label for="age">Age</label>
+                    <input id="age"
+                           disabled name="age" type="number"/>
+                    <br/>
+                    <br/>
+                    <label for="email">Email</label>
+                    <input id="email"
+                           disabled name="email" type="text"/>
+                    <br/>
+                    <br/>
+                    <label th:for="roles">Role </label>
+                    <select class="form-select"
+                            name="choseRoles" multiple size="2"
+                    >
+                        <option disabled>
+                        </option>
+                    </select>
+
+                    <br/>
+                    <br/>
+                    <br/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                        aria-label="close">Close
+                </button>
+                <button class="btn btn-danger" type="submit"
+                        data-bs-dismiss="modal"
+                        form="userDataDelete">Delete!
                 </button>
             </div>
         </div>

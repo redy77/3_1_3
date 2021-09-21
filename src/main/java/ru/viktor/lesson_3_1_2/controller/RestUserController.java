@@ -2,10 +2,7 @@ package ru.viktor.lesson_3_1_2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.viktor.lesson_3_1_2.models.Roles;
 import ru.viktor.lesson_3_1_2.models.User;
 import ru.viktor.lesson_3_1_2.service.RoleService;
@@ -53,5 +50,27 @@ public class RestUserController {
         user.setRoles(rolesForNew);
         userService.addUser(user);
         return user;
+    }
+
+    @GetMapping("/editUser/{id}")
+    User editUserId(@PathVariable Long id){
+        return userService.getUser(id);
+    }
+
+    @PatchMapping("/editUser")
+    User editUser(@RequestBody User user){
+        Set<Roles> roles = user.getRoles();
+        Set<Roles> rolesForNew = new HashSet<>();
+        for (Roles role : roles
+        ) {rolesForNew.add(roleService.getRole(role.toString()));
+        }
+        user.setRoles(rolesForNew);
+        userService.editUser(user);
+        return user;
+    }
+
+    @DeleteMapping("/{id}")
+    void deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
     }
 }
