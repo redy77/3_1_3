@@ -11,6 +11,9 @@ const passwordNewUser = document.getElementById('password')
 const editUser = document.getElementById('userData')
 const formEdit = document.getElementById('formEdit')
 const allRolesEdit = document.getElementById('allRolesEdit')
+const userDataDelete = document.getElementById('userDelete')
+const roleUserDelete = document.getElementById('allRolesDelete')
+const deleteUser = document.getElementById('userDataDelete')
 let renderAllUsers = (users) => {
     let outputUsers = ''
     users.forEach(user => {
@@ -96,9 +99,7 @@ async function selectRoles() {
     const data = await response.json()
     data.forEach(role => {
         outputAllRoles += `
-                                        <option 
-                                                th:value="${role.id}"
-                                                >${role.role}
+                                        <option >${role.role}
                                         </option>
                   `
         allRoles.innerHTML = outputAllRoles
@@ -120,6 +121,43 @@ async function usersTable() {
 
         if (deleteButtonClick){
             userId = e.target.parentElement.dataset.id
+            let userRoles = ''
+            fetch(`${urlEditUser}/${userId}`, {method: 'GET',})
+                .then(res => res.json())
+                .then(data => {
+                    let deleteForm = `
+                      <br/>
+                    <label class="form-label"
+                           for="id">ID</label>
+                    <input id="id"
+                           name="id" value=${data.id} disabled type="text"/>
+                    <br/>
+                    <label class="form-label"
+                           for="name">Name</label>
+                    <input id="name"
+                           disabled value=${data.username} name="username"
+                           type="text"/>
+                    <br/>
+                    <br/>
+                    <label for="age">Age</label>
+                    <input id="age" value=${data.age}
+                           disabled name="age" type="number"/>
+                    <br/>
+                    <br/>
+                    <label for="email">Email</label>
+                    <input id="email" value=${data.email}
+                           disabled name="email" type="text"/>
+                     `
+                    userDataDelete.innerHTML = deleteForm
+                    data.roles.forEach(role => {
+                        userRoles += `
+                                        <option >${role.role}
+                                        </option>
+                  `
+
+                    })
+                    roleUserDelete.innerHTML = userRoles
+                })
         }
         if (editButtonClick) {
             userId = e.target.parentElement.dataset.id
@@ -252,4 +290,21 @@ editUser.addEventListener('submit', async e => {
 })
 
 //delete user
+deleteUser.addEventListener('submit', async e => {
+    e.preventDefault()
+
+    let selected = Array.from(deleteUser.role.options)
+        .filter(option => option.selected)
+        .map(option => option.value);
+
+    await fetch(`${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(() => {
+            usersTable()
+        })
+})
 
