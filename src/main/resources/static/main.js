@@ -293,10 +293,6 @@ editUser.addEventListener('submit', async e => {
 deleteUser.addEventListener('submit', async e => {
     e.preventDefault()
 
-    let selected = Array.from(deleteUser.role.options)
-        .filter(option => option.selected)
-        .map(option => option.value);
-
     await fetch(`${userId}`, {
         method: 'DELETE',
         headers: {
