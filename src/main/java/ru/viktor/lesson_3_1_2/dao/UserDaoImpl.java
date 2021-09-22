@@ -1,7 +1,5 @@
 package ru.viktor.lesson_3_1_2.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import ru.viktor.lesson_3_1_2.models.User;
 import javax.persistence.EntityManager;
